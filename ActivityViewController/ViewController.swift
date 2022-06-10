@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import LinkPresentation
 
 class ViewController: UIViewController {
     
@@ -26,9 +27,45 @@ class ViewController: UIViewController {
     }
 
     @objc func buttonTap() {
-        guard let url = URL(string: "https://www.apple.com") else { return }
-        let ac = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        let activityItem = ActivityItemSource(
+            title: "Заголовок",
+            subtitle: "Описание",
+            data: "Данные"
+        )
+        let ac = UIActivityViewController(activityItems: [activityItem], applicationActivities: nil)
         present(ac, animated: true)
+    }
+    
+    class ActivityItemSource: NSObject, UIActivityItemSource {
+        
+        var title: String
+        var subtitle: String
+        var data: String
+        
+        init(title: String, subtitle: String, data: String) {
+            self.title = title
+            self.subtitle = subtitle
+            self.data = data
+            super.init()
+        }
+        
+        func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+            return title
+        }
+
+        func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+            return data
+        }
+      
+        public func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+            let metadata = LPLinkMetadata()
+            metadata.title = title
+            if let image = UIImage(named: "ActivityImage") {
+                metadata.iconProvider = NSItemProvider(object: image)
+            }
+            metadata.originalURL = URL(fileURLWithPath: subtitle)
+            return metadata
+        }
     }
 }
 
