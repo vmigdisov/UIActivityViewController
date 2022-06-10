@@ -60,7 +60,7 @@ class ViewController: UIViewController {
         public func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
             let metadata = LPLinkMetadata()
             metadata.title = title
-            if let image = UIImage(named: "ActivityImage") {
+            if let image = UIImage(named: "activityImage") {
                 metadata.iconProvider = NSItemProvider(object: image)
             }
             metadata.originalURL = URL(fileURLWithPath: subtitle)
